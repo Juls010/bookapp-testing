@@ -6,14 +6,16 @@
 
 Proyecto básico en Django para la gestión de libros, autores y portadas.
 
-## ✅ Características
+## Características
 * Listado y detalle de libros.
 * Panel de administración protegido.
 * Validaciones de datos (fechas, páginas...).
 * Sistema de Testing completo
 
-## 🧪 Cómo ejecutar los tests
+## Cómo ejecutar los tests
 Para comprobar que todo funciona correctamente:
 
 ```bash
 python manage.py test bookapp -v 2
+```
+
