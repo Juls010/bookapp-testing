@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Books</title>
+    </head>
+    <header>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'register' %}">Register</a>
+    <a href="{% url 'login' %}">Log in</a>
+    {% else %}
+    <p>Hello, {{ user.username }}</p>
+    <form method='post' action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type='submit'>Log out</button>
+    </form>
+    {% endif %}
+    </header>
+    <body>
+        {% block content %}{% endblock content %}
+    </body>
+</html>

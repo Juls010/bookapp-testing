@@ -1,0 +1,10 @@
+{% extends 'bookapp/layout.html' %}
+
+{% block content %}
+        <h1>Are you sure you want to delete the book?</h1>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Yes</button>
+            <a href="{% url 'book_list' %}">Cancel</a>
+        </form>
+{% endblock content %}

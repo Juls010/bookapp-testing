@@ -1,0 +1,23 @@
+{% extends 'bookapp/layout.html' %}
+
+{% block content %}
+        <ul>
+            {% for book in books %}
+                <li>{{book.title}}</li>
+                {% if user.is_authenticated %}
+                <a href="{% url 'book_detail' book.pk %}">Details</a>
+                {% endif %}
+                {% if perms.bookapp.change_book %}
+                <a href="{% url 'book_edit' book.pk %}">Edit</a>
+                {% endif %}
+                {% if perms.bookapp.delete_book %}
+                <a href="{% url 'book_delete' book.pk %}">Delete</a>
+                {% endif %}
+            {% empty %}
+                There are no books
+            {% endfor %}
+        </ul>
+        {% if perms.bookapp.add_book %}
+        <a href="{% url 'form' %}">New book</a>
+        {% endif %}
+{% endblock content %}

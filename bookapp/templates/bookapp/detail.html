@@ -1,0 +1,11 @@
+{% extends 'bookapp/layout.html' %}
+
+{% block content %}
+        <h2>{{ book.title }}</h2>
+        <p>Pages: {{ book.pages }}</p>
+        <p>Rating: {{ book.rating }}</p>
+        <p>Status: {{ book.status }}</p>
+        <p>Published date: {{ book.published_date }}</p>
+        <p>Read date: {{ book.read_date }}</p>
+        <a href="{% url 'book_list' %}">Back</a>
+{% endblock content %}

@@ -1,0 +1,9 @@
+{% extends 'bookapp/layout.html' %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Send</button>
+</form>
+{% endblock content %}
