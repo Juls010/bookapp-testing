@@ -136,8 +136,8 @@ class BookFormTest(TestCase):
 
 
 class BookControllerTest(TestCase):
-
-# Usuario normal y usuario admin
+    
+    # Usuario normal y usuario admin
     def setUp(self):
         self.client = Client()
         self.user_normal = User.objects.create_user(username='pepe', password='password123')
@@ -149,71 +149,89 @@ class BookControllerTest(TestCase):
         
         self.book = Book.objects.create(title="Libro Test", pages=100, status="RE", published_date="2023-01-01")
 
-#  LIST . EL usuario normal puede ver la lista
+    # LIST . 
+    # El usuario normal puede ver la lista 
     def test_list_view_user_normal(self):
         self.client.force_login(self.user_normal)
         response = self.client.get(reverse('book_list'))
         self.assertEqual(response.status_code, 200)
 
-# El admin tambien
+    # Admin tambien 
     def test_list_view_admin(self):
-        
         self.client.force_login(self.user_admin)
         response = self.client.get(reverse('book_list'))
         self.assertEqual(response.status_code, 200)
 
-#  DETAIL . Usuario autenticado puede ver detalle
+    # DETAIL . 
+    # Usuario autenticado puede ver detalle 
     def test_detail_view_user_normal(self):
         url = reverse('book_detail', args=[self.book.id])
         self.client.force_login(self.user_normal)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-
+    
+    # Admin puede ver detalle
     def test_detail_view_admin(self):
         url = reverse('book_detail', args=[self.book.id])
         self.client.force_login(self.user_admin)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-#  CREATE FORM .
-# Corrección : Usuario normal no debe poder crear 
+    # CREATE FORM
+    # Usuario normal no puede crear 
     def test_create_view_user_normal(self):
         url = reverse('form')
         self.client.force_login(self.user_normal)
         response = self.client.get(url)
         self.assertNotEqual(response.status_code, 200)
 
-# Admin si puede crear
+    # Admin si puede crear
     def test_create_view_admin(self):
         url = reverse('form')
         self.client.force_login(self.user_admin)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        data = {
+            'title': 'New Admin Book',
+            'pages': 150,
+            'rating': 5,
+            'status': 'FI',
+            'published_date': '2023-01-01'
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
 
-#   EDIT . Usuario normal no puede editar
+    # EDIT
+    # Usuario normal no puede editar 
     def test_edit_view_user_normal(self):
         url = reverse('book_edit', args=[self.book.id])
         self.client.force_login(self.user_normal)
         response = self.client.get(url)
         self.assertNotEqual(response.status_code, 200)
 
-# Admin si puede editar
+    # Admin puede editar
     def test_edit_view_admin(self):
         url = reverse('book_edit', args=[self.book.id])
         self.client.force_login(self.user_admin)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        data = {
+            'title': 'Libro Editado',
+            'pages': 200,
+            'rating': 4,
+            'status': 'FI',
+            'published_date': '2023-01-01'
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
 
-#  DELETE . Usuario normal no puede borrar
+    # DELETE
+    # Usuario normal no puede borrar 
     def test_delete_view_user_normal(self):
         url = reverse('book_delete', args=[self.book.id])
         self.client.force_login(self.user_normal)
-        response = self.client.get(url)
-        self.assertNotEqual(response.status_code, 200)
+        response = self.client.post(url)
+        self.assertNotEqual(response.status_code, 302)
 
-# Admin si puede borrar
+    # Admin si puede borrar
     def test_delete_view_admin(self):
         url = reverse('book_delete', args=[self.book.id])
         self.client.force_login(self.user_admin)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
